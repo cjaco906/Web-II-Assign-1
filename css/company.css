@@ -1,0 +1,161 @@
+/* Google Font: https://fonts.google.com/specimen/Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/** MRU Brand Colors (Latter, 2020)
+ *  - https://www.mtroyal.ca/AboutMountRoyal/MarketingCommunications/index.htm
+ *  - https://www.scribd.com/document/569514571/MRU-Brand-Guideline-2020-07
+ */
+:root {
+    --color-kerby-blue: #003352;
+    --color-lincoln-blue: #007fb5;
+    --color-focus-blue: #00b1ff;
+    --color-historic-silver: #a7a9ac;
+
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+
+    height: 100%;
+}
+
+article {
+    display: grid;
+    grid-template-rows: repeat(2, auto) 1fr;
+    height: 100vh;
+}
+
+.history-dashboard {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.history-dashboard > div {
+    background-color: var(--color-lincoln-blue);
+    color: white;
+    font-size: 20px;
+
+    text-align: center;
+
+    width: 300px;
+    border-radius: 10px;
+    padding: 25px 0;
+}
+
+.history-dashboard > div > h1:nth-child(1) {
+    background-color: var(--color-kerby-blue);
+    padding: 15px 0;
+}
+
+.company-description {
+    background: var(--color-kerby-blue);
+    color: white;
+
+    text-indent: 5rem;
+    margin: 50px 0;
+    padding: 5px 0;
+}
+
+.company-description > h1 {
+    margin: 25px 0;
+}
+
+.history-table {
+    background-color: var(--color-lincoln-blue);
+
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.history-table > h1 {
+    color: white;
+    text-indent: 5rem;
+    margin: 25px 0;
+}
+
+.history-data {
+    background-color: var(--color-kerby-blue);
+    color: white;
+    font-size: 1.5rem;
+
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-auto-flow: column;
+
+    text-align: center;
+}
+
+.history-data div h2 {
+    padding: 25px 0;
+}
+
+.history-data > div {
+    margin-left: 50px;
+}
+
+.history-data > div > h2 {
+    border-radius: 10px;
+}
+
+.history-data > div:nth-child(1) {
+    background-color: var(--color-focus-blue);
+
+    padding: 0 25px;
+}
+
+.history-data > div:nth-child(1) li:nth-child(2n) {
+    /* color-mix() - https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix */
+    background-color: color-mix(in srgb, var(--color-lincoln-blue), var(--color-focus-blue));
+}
+
+.history-data > div:nth-child(2) {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 25px;
+
+    margin-right: 50px;
+}
+
+.history-data > div:nth-child(2) li {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    text-align: left;
+}
+
+.history-data > div:nth-child(2) div:nth-child(2n) li {
+    /* color-mix() - https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix */
+    background-color: color-mix(in srgb, var(--color-lincoln-blue), var(--color-kerby-blue));
+}
+
+.history-data > div div li::before {
+    text-align: center;
+}
+
+.history-data > div:nth-child(2) div:nth-child(1) li::before {
+    content: '';
+}
+
+.history-data > div:nth-child(2) div:nth-child(n + 2) li::before {
+    content: '$';
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: var(--color-lincoln-blue);
+
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 15px 0;
+}
