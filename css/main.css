@@ -1,3 +1,34 @@
+/* Google Font: https://fonts.google.com/specimen/Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/** MRU Brand Colors (Latter, 2020)
+ *  - https://www.mtroyal.ca/AboutMountRoyal/MarketingCommunications/index.htm
+ *  - https://www.scribd.com/document/569514571/MRU-Brand-Guideline-2020-07
+ */
+:root {
+    --color-lincoln-blue: #007fb5;
+    --color-focus-blue: #00b1ff;
+    --color-historic-silver: #a7a9ac;
+    --color-background: color-mix(in srgb, var(--color-focus-blue) 25%, white 75%);    --color-kerby-blue: #003352;
+
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+body {
+    background-color: var(--color-background);
+
+    margin: 0;
+    padding: 0;
+
+    height: 100%;
+}
+
 .format-accounting,
 .format-accounting-list li {
     grid-template-columns: 100px 1fr;
