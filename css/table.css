@@ -1,21 +1,3 @@
-ul {
-    list-style-type: none;
-    padding: 0; /* remove default list padding */
-}
-
-li {
-    background-color: var(--color-lincoln-blue);
-
-    border-radius: 5px;
-    margin: 10px 0;
-    padding: 15px 0;
-}
-
-li:hover {
-    background-color: white;
-    color: black;
-}
-
 .table {
     box-shadow: 0 0 25px 0 var(--color-kerby-blue);
     font-size: 1.5rem;
@@ -51,6 +33,27 @@ li:hover {
 
     position: sticky;
     top: 0;
+}
+
+/* Selects all column list containers */
+.table-data ul {
+    list-style-type: none;
+    padding: 0; /* remove default list padding */
+}
+
+/* Selects all column lists */
+.table-data li {
+    background-color: var(--color-lincoln-blue);
+
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 15px 0;
+}
+
+/* Selects all column lists on hover */
+.table-data li:hover {
+    background-color: white;
+    color: black;
 }
 
 /* Selects the column containers  */
