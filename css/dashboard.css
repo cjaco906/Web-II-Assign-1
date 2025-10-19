@@ -1,0 +1,36 @@
+.dashboard {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/* Selects dashboard cards */
+.dashboard div {
+    background-color: var(--color-lincoln-blue);
+    box-shadow: 0 0 25px 0 var(--color-kerby-blue);
+    outline: 5px solid var(--color-focus-blue);
+    color: white;
+
+    width: 300px;
+    border-radius: 10px;
+    padding: 25px 0;
+}
+
+/* Selects dashboard card titles */
+.dashboard div h1:nth-child(1) {
+    background-color: var(--color-kerby-blue);
+    padding: 15px 0;
+
+    text-align: center;
+}
+
+/* Selects dashboard card contents */
+.dashboard div h1:nth-child(2) {
+    display: grid;
+
+    text-align: center;
+}
+
+/* Selects dashboard card contents' icon */
+.dashboard div h1:nth-child(2)::before {
+    text-align: center;
+}
