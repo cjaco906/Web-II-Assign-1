@@ -30,6 +30,56 @@ body {
     height: 100%;
 }
 
+header {
+    background-color: var(--color-kerby-blue);
+    color: white;
+    font-weight: bold;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    align-items: center;
+
+    margin-bottom: 50px;
+}
+
+/* Selects the header title */
+header h1 {
+    font-size: 1rem;
+
+    padding: 0 75px;
+}
+
+nav ul {
+    font-size: 1rem;
+
+    display: flex;
+}
+
+nav ul li a {
+    display: block;
+
+    padding: 25px;
+}
+
+/* Selects the api tester button */
+nav ul li:last-child {
+    margin-left: auto;
+}
+
+/* Selects all column list containers */
+ul {
+    list-style-type: none;
+    margin: 0; /* remove default margin */
+    padding: 0; /* remove default padding */
+}
+
+/* Selects all column lists on hover */
+li:hover {
+    background-color: white;
+    color: black;
+}
+
 .format-accounting,
 .format-accounting-list li {
     grid-template-columns: 100px 1fr;
