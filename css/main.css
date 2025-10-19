@@ -1,0 +1,11 @@
+.format-accounting,
+.format-accounting-list li {
+    grid-template-columns: 100px 1fr;
+
+    text-align: left !important;
+}
+
+.format-accounting::before,
+.format-accounting-list li::before {
+    content: "$" !important;
+}

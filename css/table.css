@@ -101,13 +101,14 @@ li:hover {
 /* Selects the column lists subsequent from the primary column */
 .table-data-other li {
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 50px 1fr;
 
     text-align: left;
 }
 
 /* Selects the column lists' icons subsequent from the primary column */
 .table-data-other li::before {
+    content: "";
     text-align: center;
 }
 
