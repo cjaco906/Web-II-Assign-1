@@ -74,6 +74,11 @@ h1, h2 {
     padding: 0; /* remove default padding */
 }
 
+a {
+    color: inherit; /* use global text color */
+    text-decoration: none; /* remove underline */
+}
+
 /* Selects all column list containers */
 ul {
     list-style-type: none;
