@@ -35,10 +35,9 @@
     top: 0;
 }
 
-/* Selects all column list containers */
-.table-data ul {
-    list-style-type: none;
-    padding: 0; /* remove default list padding */
+/* Selects the column containers  */
+.table-data > div {
+    margin-left: 50px;
 }
 
 /* Selects all column lists */
@@ -48,17 +47,6 @@
     border-radius: 5px;
     margin: 10px 0;
     padding: 15px 0;
-}
-
-/* Selects all column lists on hover */
-.table-data li:hover {
-    background-color: white;
-    color: black;
-}
-
-/* Selects the column containers  */
-.table-data > div {
-    margin-left: 50px;
 }
 
 /* Selects the primary column container */
