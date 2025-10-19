@@ -1,0 +1,122 @@
+/* color-mix() - https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix */
+
+ul {
+    list-style-type: none;
+    padding: 0; /* remove default list padding */
+}
+
+li {
+    background-color: var(--color-lincoln-blue);
+
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 15px 0;
+}
+
+li:hover {
+    background-color: white;
+    color: black;
+}
+
+.table {
+    box-shadow: 0 0 25px 0 var(--color-kerby-blue);
+    font-size: 1.5rem;
+
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.table-title {
+    background-color: var(--color-lincoln-blue);
+    color: white;
+
+    margin: 0; /* remove default margin */
+    padding: 25px 0 25px 100px;
+}
+
+.table-data {
+    background-color: var(--color-kerby-blue);
+    color: white;
+
+    display: grid;
+    grid-template-columns: 300px 1fr;
+}
+
+/* Selects all columns */
+.table-data div {}
+
+/* Selects all column titles */
+.table-data div h2 {
+    padding: 25px 0;
+
+    text-align: center;
+
+    position: sticky;
+    top: 0;
+}
+
+/* Selects the column containers  */
+.table-data > div {
+    margin-left: 50px;
+}
+
+/* Selects the primary column container */
+.table-data-primary {
+    padding: 0 25px;
+
+    text-align: center;
+}
+
+/* Selects the primary column container and title */
+.table-data-primary,
+.table-data-primary h2 {
+    background-color: var(--color-focus-blue);
+}
+
+/* Selects the primary column list in alternating order */
+.table-data-primary li:nth-child(2n) {
+    background-color: color-mix(in srgb, var(--color-lincoln-blue), var(--color-focus-blue));
+}
+
+/* Selects the primary column list in alternating order on hover */
+.table-data-primary li:nth-child(2n):hover {
+    background-color: white;
+}
+
+/* Selects the columns subsequent from the primary column */
+.table-data-other {
+    display: grid;
+    gap: 25px;
+
+    text-align: left;
+
+    margin-right: 50px;
+}
+
+/* Selects the column titles subsequent from the primary column */
+.table-data-other h2 {
+    background-color: var(--color-kerby-blue);
+}
+
+/* Selects the column lists subsequent from the primary column */
+.table-data-other li {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+
+    text-align: left;
+}
+
+/* Selects the column lists' icons subsequent from the primary column */
+.table-data-other li::before {
+    text-align: center;
+}
+
+/* Selects the column lists subsequent from the primary column in alternating order */
+.table-data-other div:nth-child(2n) li {
+    background-color: color-mix(in srgb, var(--color-lincoln-blue), var(--color-kerby-blue));
+}
+
+/* Selects the column lists subsequent from the primary column in alternating order on hover */
+.table-data-other div:nth-child(2n) li:hover {
+    background-color: white;
+}
