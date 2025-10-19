@@ -19,6 +19,8 @@
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
+
+    color: white;
 }
 
 body {
@@ -69,7 +71,7 @@ nav ul li:last-child {
 
 h1, h2 {
     margin: 0; /* remove default margin */
-    padding: 0; /* remove default margin */
+    padding: 0; /* remove default padding */
 }
 
 /* Selects all column list containers */
