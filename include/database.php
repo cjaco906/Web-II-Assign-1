@@ -17,6 +17,11 @@ class StocksDatabase
         $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     }
 
+    public function prepare($query): PDOStatement
+    {
+        return $this->statement = $this->pdo->prepare($query);
+    }
+
     public function select($fields, $table, $options = ""): PDOStatement
     {
         return $this->statement = $this->pdo->prepare("SELECT $fields FROM $table $options");
