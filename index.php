@@ -9,6 +9,80 @@ require_once "include/ui.php";
 const DATABASE = new StocksDatabase();
 
 define("SELECTED_CUSTOMER_ID", $_GET["ref"]);
+
+$companies = StocksDatabase::TABLE_COMPANIES;
+$history = StocksDatabase::TABLE_HISTORY;
+$portfolio = StocksDatabase::TABLE_PORTFOLIO;
+
+$query = "SELECT";
+$query .= "\n\nSUM(shares * close) AS value";
+$query .= "\nFROM ("; // brings in share and close results
+$query .= "\n\nSELECT";
+$query .= "\n\n\nSUM($portfolio.amount) AS shares,"; // prevents duplication
+$query .= "\n\n\n$history.close AS close";
+$query .= "\n\nFROM $history";
+$query .= "\n\nINNER JOIN $portfolio ON $portfolio.symbol = $history.symbol"; // brings in close results
+$query .= "\n\nWHERE $portfolio.userId = :id AND $history.close = ("; // match with the newest close results for every company
+$query .= "\n\n\nSELECT";
+$query .= "\n\n\n\n$history.close";
+$query .= "\n\n\nFROM $history";
+$query .= "\n\n\nWHERE $history.symbol = $portfolio.symbol";
+$query .= "\n\n\nORDER BY $history.date DESC"; // sort by newest
+$query .= "\n\n\nLIMIT 1)"; // returns the newest close result
+$query .= "\n\nGROUP BY $portfolio.symbol)";
+
+query_by_customer($query);
+define("STOCK_VALUES", DATABASE->fetch_all());
+
+$query = "SELECT DISTINCT";
+$query .= "\n\n$companies.symbol,";
+$query .= "\n\n$companies.name,";
+$query .= "\n\n$companies.sector,";
+$query .= "\n\nSUM($portfolio.amount) AS shares";
+$query .= "\nFROM $companies";
+$query .= "\nINNER JOIN $portfolio ON $portfolio.symbol = $companies.symbol";
+$query .= "\nWHERE $portfolio.userId = :id";
+$query .= "\nGROUP BY $companies.symbol";
+$query .= "\nORDER BY $companies.symbol";
+
+query_by_customer($query);
+define("PORTFOLIO_DETAILS", DATABASE->fetch_all());
+
+$query = "SELECT";
+$query .= "\n\nCOUNT(DISTINCT $portfolio.symbol) AS symbol,";
+$query .= "\n\nSUM(portfolio.amount) AS shares";
+$query .= "\nFROM $portfolio";
+$query .= "\nWHERE $portfolio.userId = :id";
+
+query_by_customer($query);
+define("DASHBOARD_DETAILS", DATABASE->fetch_all()[0]);
+
+function query_by_customer(string $query): void
+{
+    DATABASE->prepare($query);
+    DATABASE->bind(":id", SELECTED_CUSTOMER_ID);
+    DATABASE->execute();
+}
+
+function compute_stock_value(string $symbol): float
+{
+    $history = StocksDatabase::TABLE_HISTORY;
+
+    $query = "SELECT";
+    $query .= "\n\n$history.close";
+    $query .= "\nFROM $history";
+    $query .= "\nWHERE $history.symbol = :symbol";
+    $query .= "\nORDER BY $history.date DESC"; // sort by newest
+    $query .= "\nLIMIT 1"; // returns the newest close result
+
+    DATABASE->prepare($query);
+    DATABASE->bind(":symbol", $symbol);
+    DATABASE->execute();
+    
+    $test = DATABASE->fetch()["close"];
+    return $test;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,48 +120,12 @@ render_header();
                 </ul>
             </section>
             <section class="customer-portfolio">
-                <?php
-                $companies = StocksDatabase::TABLE_COMPANIES;
-                $portfolio = StocksDatabase::TABLE_PORTFOLIO;
-                $history = StocksDatabase::TABLE_HISTORY;
-                
-                $query = "SELECT DISTINCT";
-                $query .= "\n$companies.symbol,";
-                $query .= "\n$companies.name,";
-                $query .= "\n$companies.sector,";
-                $query .= "\nSUM($portfolio.amount) AS shares";
-                $query .= "\nFROM $companies";
-                $query .= "\nINNER JOIN $portfolio ON $portfolio.symbol = $companies.symbol";
-                $query .= "\nWHERE $portfolio.userId = :customer";
-                $query .= "\nGROUP BY $companies.symbol";
-                $query .= "\nORDER BY $companies.symbol";
-                
-                DATABASE->prepare($query);
-                DATABASE->bind(":customer", SELECTED_CUSTOMER_ID);
-                DATABASE->execute();
-                
-                $portfolio = DATABASE->fetch_all();
-                
-                $query = "SELECT";
-                $query .= "\nCOUNT(DISTINCT portfolio.symbol) AS symbol,";
-                $query .= "\nSUM(portfolio.amount) AS shares";
-                $query .= "\nFROM portfolio";
-                $query .= "\nWHERE portfolio.userId = :id";
-
-                DATABASE->prepare($query);
-                DATABASE->bind(":id", SELECTED_CUSTOMER_ID);
-                DATABASE->execute();
-
-                $result = DATABASE->fetch();
-                $total_companies = $result["symbol"];
-                $total_shares = $result["shares"];
-                ?>
                 <div class="dashboard customer-portfolio-dashboard">
                     <div>
                         <h1>COMPANIES</h1>
                         <h1>
                             <?php
-                            echo $total_companies;
+                            echo DASHBOARD_DETAILS["symbol"];
                             ?>
                         </h1>
                     </div>
@@ -95,7 +133,7 @@ render_header();
                         <h1>TOTAL SHARES</h1>
                         <h1>
                             <?php
-                            echo $total_shares;
+                            echo DASHBOARD_DETAILS["shares"];
                             ?>
                         </h1>
                     </div>
@@ -105,14 +143,9 @@ render_header();
                             <?php
                             $total_value = 0;
 
-                            foreach ($portfolio as $rows)
+                            foreach (STOCK_VALUES as $row)
                             {
-                                $symbol = $rows["symbol"];
-                                $shares = $rows["shares"];
-                                
-                                $close = get_latest_history_close($symbol);
-                                $value = $shares * $close;
-                                $total_value += $value;
+                                $total_value += $row["value"];
                             }
                             
                             echo number_format($total_value, 2);
@@ -127,7 +160,7 @@ render_header();
                             <h2>SYMBOL</h2>
                             <ul>
                                 <?php
-                                foreach ($portfolio as $row)
+                                foreach (PORTFOLIO_DETAILS as $row)
                                 {
                                     $symbol = $row["symbol"];
 
@@ -141,7 +174,7 @@ render_header();
                                 <h2>NAME</h2>
                                 <ul>
                                     <?php
-                                    foreach ($portfolio as $row)
+                                    foreach (PORTFOLIO_DETAILS as $row)
                                     {
                                         $name = $row["name"];
 
@@ -154,7 +187,7 @@ render_header();
                                 <h2>SECTOR</h2>
                                 <ul>
                                     <?php
-                                    foreach ($portfolio as $row)
+                                    foreach (PORTFOLIO_DETAILS as $row)
                                     {
                                         $name = $row["sector"];
 
@@ -167,7 +200,7 @@ render_header();
                                 <h2>SHARES</h2>
                                 <ul>
                                     <?php
-                                    foreach ($portfolio as $row)
+                                    foreach (PORTFOLIO_DETAILS as $row)
                                     {
                                         $shares = $row["shares"];
 
@@ -180,12 +213,14 @@ render_header();
                                 <h2>VALUE</h2>
                                 <ul>
                                     <?php
-                                    foreach ($portfolio as $row)
+                                    foreach (PORTFOLIO_DETAILS as $row)
                                     {
                                         $symbol = $row["symbol"];
                                         $shares = $row["shares"];
-                                        $close = get_latest_history_close($symbol);
+
+                                        $close = compute_stock_value($symbol);
                                         $value = $shares * $close;
+                                        $value = number_format($value, 2);
 
                                         echo "<li>$value</li>";
                                     }
