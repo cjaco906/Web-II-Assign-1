@@ -1,0 +1,20 @@
+dl {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Selects grouped definition lists */
+dl div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+dt, dd {
+    margin: 0; /* remove default margin */
+    padding: 20px;
+}
+
+dt:hover, dd:hover {
+    background-color: color-mix(in srgb, var(--color-lincoln-blue), var(--color-focus-blue));
+}
+
