@@ -3,7 +3,6 @@
 // is_null - https://www.php.net/manual/en/function.is-null.php
 
 require_once "include/header.php";
-require_once "include/footer.php";
 require_once "include/database.php";
 require_once "include/ui.php";
 
