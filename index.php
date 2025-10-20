@@ -1,5 +1,6 @@
 <?php
 // $_SERVER (PHP_SELF) - https://www.php.net/manual/en/reserved.variables.server.php
+// is_null - https://www.php.net/manual/en/function.is-null.php
 
 require_once "include/header.php";
 require_once "include/footer.php";
@@ -8,7 +9,7 @@ require_once "include/ui.php";
 
 const DATABASE = new StocksDatabase();
 
-define("SELECTED_CUSTOMER_ID", 7);
+define("SELECTED_CUSTOMER_ID", $_GET["ref"]);
 
 $companies = StocksDatabase::TABLE_COMPANIES;
 $history = StocksDatabase::TABLE_HISTORY;
@@ -120,6 +121,12 @@ function compute_stock_value(string $symbol): float
                 </ul>
             </section>
             <section class="customer-portfolio">
+                <?php
+                if (is_null(SELECTED_CUSTOMER_ID)) {
+                    echo "<h1 class='customer-portfolio-empty neat-shadow'>Please select a customer</h1>";
+                    return;
+                }
+                ?>
                 <div class="dashboard customer-portfolio-dashboard">
                     <div>
                         <h1>COMPANIES</h1>
