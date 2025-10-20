@@ -13,33 +13,66 @@ class StocksDatabase
 
     public function __construct(string $name)
     {
-        $this->pdo = new PDO("sqlite:$name");
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        try {
+            $this->pdo = new PDO("sqlite:$name");
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 
     public function prepare($query): PDOStatement
     {
-        return $this->statement = $this->pdo->prepare($query);
+        try {
+            return $this->statement = $this->pdo->prepare($query);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 
     public function bind($name, $value): bool
     {
-        return $this->statement->bindValue($name, $value);
+        try {
+            return $this->statement->bindValue($name, $value);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
     public function execute(): bool
     {
-        return $this->statement->execute();
+        try {
+            return $this->statement->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 
     public function fetch(): mixed
     {
-        return $this->statement->fetch();
+        try {
+            return $this->statement->fetch();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function fetch_once(string $field): mixed
+    {
+        try {
+            return $this->statement->fetch()[$field];
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 
     public function fetch_all(): array
     {
-        return $this->statement->fetchAll();
+        try {
+            return $this->statement->fetchAll();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 
     public function close(): void
