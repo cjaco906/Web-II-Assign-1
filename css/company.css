@@ -1,7 +1,5 @@
 article {
     display: grid;
-    grid-template-rows: repeat(2, auto) 1fr;
-    height: 100vh;
 }
 
 .company-information {
@@ -10,6 +8,12 @@ article {
 
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+}
+
+.company-description-title,
+.company-description-text,
+.company-details-title {
+    padding: 25px 0;
 }
 
 .company-description-title,
@@ -61,10 +65,6 @@ article {
 .company-contact-details div {
     grid-template-columns: 200px auto;
     padding-left: 150px;
-}
-
-.company-financials {
-    margin-top: 50px;
 }
 
 .company-financials-data-other {

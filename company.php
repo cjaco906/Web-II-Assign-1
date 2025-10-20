@@ -1,57 +1,60 @@
 <?php
-// is_numeric - https://www.php.net/manual/en/function.is-numeric.php
-// round - https://www.php.net/manual/en/function.round.php
-// number_format - https://www.php.net/manual/en/function.number-format.php
 // wordwrap - https://www.php.net/manual/en/function.wordwrap.php
 
+require_once "include/header.php";
 require_once "include/database.php";
-require_once "include/ui.php";
 
-const DATABASE = new StocksDatabase();
-const COMPANY_SYMBOL = "A"; // TODO: remove (testing purposes)
+const STOCKS_DATABASE = new StocksDatabase("data/stocks.db");
 
-//define("COMPANY_SYMBOL", $_GET["ref"]);
-define("COMPANY", fetch_all(StocksDatabase::TABLE_COMPANIES, "*")[0]);
-define("HISTORY", fetch_all(StocksDatabase::TABLE_HISTORY, "*"));
+define("COMPANY_SYMBOL", $_GET["ref"]);
+query(StocksDatabase::TABLE_COMPANIES, "*");
+define("COMPANY", STOCKS_DATABASE->fetch_all()[0]);
 
-function query(string $table, string $field, string $options = ""): void
+function query(string $table, string $field): void
 {
-    DATABASE->select($field, $table, "WHERE symbol = :symbol " . $options);
-    DATABASE->bind(":symbol", COMPANY_SYMBOL);
-    DATABASE->execute();
+    $sql = "SELECT";
+    $sql .= "\n\n$field";
+    $sql .= "\nFROM $table";
+    $sql .= "\nWHERE symbol = :symbol";
+
+    STOCKS_DATABASE->prepare($sql);
+    STOCKS_DATABASE->bind(":symbol", COMPANY_SYMBOL);
+    STOCKS_DATABASE->execute();
 }
 
-function fetch_once(string $table, string $field, string $options = ""): mixed
+function list_history(string $field): void
 {
-    query($table, $field, $options);
+    query(StocksDatabase::TABLE_HISTORY, $field);
     
-    return DATABASE->fetch();
+    while ($company = STOCKS_DATABASE->fetch()) {
+        $data = $company[$field];
+        $data = format($data);
+
+        echo "<li>" . $data . "</li>";
+    }
 }
 
-function fetch_all(string $table, string $field, string $options = ""): array
+function list_financials(string $field): void
 {
-    query($table, $field, $options);
     
-    return DATABASE->fetch_all();
-}
-
-function list_history(string $field, bool $format_decimal = true): void
-{
-    render_rows(HISTORY, $field, $format_decimal);
-}
-
-function list_financials(string $field, bool $format_decimal = true): void
-{
     try
     {
-        $json = json_decode(COMPANY["financials"], true);
+        $company = COMPANY["financials"];
+        $json = json_decode($company, true);
     }
     catch (ValueError $e)
     {
         die($e->getMessage());
     }
     
-    render_json($json, $field, $format_decimal);
+    $array = $json[$field];
+
+    foreach ($array as $data)
+    {
+        $data = format($data);
+
+        echo "<li>" . $data . "</li>";
+    }
 }
 ?>
 
@@ -61,22 +64,24 @@ function list_financials(string $field, bool $format_decimal = true): void
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Company</title>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/deflist.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/table.css">
-    <link rel="stylesheet" href="css/deflist.css">
     <link rel="stylesheet" href="css/company.css">
-    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <header>
-        <nav></nav>
-    </header>
+    <?php
+    render_header();
+    ?>
     <main>
         <article>
-            <section class="company-information">
+            <section class="company-information neat-shadow">
                 <div class="company-description">
                     <h1 class="company-description-title">
                         <?php
+                        
                         echo COMPANY["name"] . " (" . COMPANY_SYMBOL . ")";
                         ?>
                     </h1>
@@ -150,7 +155,7 @@ function list_financials(string $field, bool $format_decimal = true): void
                     </dl>
                 </div>
             </section>
-            <section class="table company-financials">
+            <section class="table company-financials neat-shadow">
                 <h1 class="table-title">Company Financials</h1>
                 <div class="table-data">
                     <div class="table-data-primary">
@@ -198,64 +203,72 @@ function list_financials(string $field, bool $format_decimal = true): void
                 </div>
             </section>
             <section class="dashboard company-history-dashboard">
-                <div>
+                <div class="neat-shadow">
                     <h1>
                         HISTORY<br>
                         HIGH
                     </h1>
                     <h1 class="format-accounting">
                         <?php
-                        $highest = fetch_once(StocksDatabase::TABLE_HISTORY, "MAX(high) AS Highest")["Highest"];
+                        query(StocksDatabase::TABLE_HISTORY, "MAX(high) as highest");
+                        
+                        $highest = STOCKS_DATABASE->fetch_once("highest");
                         $highest = format($highest);
 
                         echo $highest;
                         ?>
                     </h1>
                 </div>
-                <div>
+                <div class="neat-shadow">
                     <h1>
                         HISTORY<br>
                         LOW
                     </h1>
                     <h1 class="format-accounting">
                         <?php
-                        $lowest = fetch_once(StocksDatabase::TABLE_HISTORY, "MIN(low) AS Lowest")["Lowest"];
+                        query(StocksDatabase::TABLE_HISTORY, "MIN(low) as lowest");
+                        
+                        $lowest = STOCKS_DATABASE->fetch_once("lowest");
                         $lowest = format($lowest);
 
                         echo $lowest;
                         ?>
                     </h1>
                 </div>
-                <div>
+                <div class="neat-shadow">
                     <h1>
                         TOTAL<br>
                         VOLUME
                     </h1>
                     <h1>
                         <?php
-                        $total = fetch_once(StocksDatabase::TABLE_HISTORY, "SUM(volume) AS TotalVolume")["TotalVolume"];
+                        query(StocksDatabase::TABLE_HISTORY, "SUM(volume) as total");
+                        
+                        $total = STOCKS_DATABASE->fetch_once("total");
                         $total = format($total); // add commas
 
                         echo $total;
                         ?>
                     </h1>
                 </div>
-                <div>
+                <div class="neat-shadow">
                     <h1>
                         AVG.<br>
                         VOLUME
                     </h1>
                     <h1>
                         <?php
-                        $avg = fetch_once(StocksDatabase::TABLE_HISTORY, "AVG(volume) AS AvgVolume")["AvgVolume"];
-                        $avg = format(round($avg), false); // add commas and round to nearest whole
+                        query(StocksDatabase::TABLE_HISTORY, "AVG(volume) as avg");
+                        
+                        $avg = STOCKS_DATABASE->fetch_once("avg");
+                        $avg = format($avg); // add commas and round to nearest whole
 
                         echo $avg;
                         ?>
                     </h1>
                 </div>
             </section>
-            <section class="table company-history">
+            <section class="table neat-shadow company-history">
                 <h1 class="table-title">Company History</h1>
                 <div class="table-data">
                     <div class="table-data-primary">
@@ -267,7 +280,7 @@ function list_financials(string $field, bool $format_decimal = true): void
                         </ul>
                     </div>
                     <div class="table-data-other company-history-data-other">
-                        <div class="history-data-volume">
+                        <div>
                             <h2>VOLUME</h2>
                             <ul>
                                 <?php
@@ -275,7 +288,7 @@ function list_financials(string $field, bool $format_decimal = true): void
                                 ?>
                             </ul>
                         </div>
-                        <div class="accounting-format-list">
+                        <div class="format-accounting-list">
                             <h2>OPEN</h2>
                             <ul>
                                 <?php
@@ -283,7 +296,7 @@ function list_financials(string $field, bool $format_decimal = true): void
                                 ?>
                             </ul>
                         </div>
-                        <div class="accounting-format-list">
+                        <div class="format-accounting-list">
                             <h2>CLOSE</h2>
                             <ul>
                                 <?php
@@ -291,7 +304,7 @@ function list_financials(string $field, bool $format_decimal = true): void
                                 ?>
                             </ul>
                         </div>
-                        <div class="accounting-format-list">
+                        <div class="format-accounting-list">
                             <h2>HIGH</h2>
                             <ul>
                                 <?php
@@ -299,7 +312,7 @@ function list_financials(string $field, bool $format_decimal = true): void
                                 ?>
                             </ul>
                         </div>
-                        <div class="accounting-format-list">
+                        <div class="format-accounting-list">
                             <h2>LOW</h2>
                             <ul>
                                 <?php
@@ -319,4 +332,4 @@ function list_financials(string $field, bool $format_decimal = true): void
 </html>
 
 <?php
-DATABASE->close();
+STOCKS_DATABASE->close();
