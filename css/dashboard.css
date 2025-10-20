@@ -6,7 +6,6 @@
 /* Selects dashboard cards */
 .dashboard div {
     background-color: var(--color-lincoln-blue);
-    box-shadow: 0 0 25px 0 var(--color-kerby-blue);
     outline: 5px solid var(--color-lincoln-blue);
     color: white;
 
