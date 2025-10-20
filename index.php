@@ -175,7 +175,7 @@ function compute_stock_value(string $symbol): float
                                 {
                                     $symbol = $row["symbol"];
 
-                                    echo "<li><a href='companies.php?ref=$symbol'>$symbol</a></li>";
+                                    echo "<li><a href='company.php?ref=$symbol'>$symbol</a></li>";
                                 }
                                 ?>
                             </ul>
