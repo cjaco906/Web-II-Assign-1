@@ -67,6 +67,17 @@ article {
     padding-left: 150px;
 }
 
+.company-website dd {
+    margin: 0;
+    padding: 0;
+}
+
+.company-website a {
+    text-decoration: underline;
+
+    padding: 20px;
+}
+
 .company-financials-data-other {
     grid-template-columns: repeat(4, 1fr);
 }

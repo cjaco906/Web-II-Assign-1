@@ -120,11 +120,13 @@ function list_financials(string $field): void
                 <div class="company-details">
                     <h1 class="company-details-title">Contact Information</h1>
                     <dl class="company-contact-details">
-                        <div>
+                        <div class="company-website">
                             <dt>Website</dt>
                             <dd>
                                 <?php
-                                echo COMPANY["website"];
+                                $link = COMPANY["website"];
+
+                                echo "<a href='$link'>" . $link . "</a>";
                                 ?>
                             </dd>
                         </div>
