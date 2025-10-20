@@ -2,10 +2,6 @@
 /* google font (inter) - https://fonts.google.com/specimen/Inter */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-*, *::before, *::after {
-    box-sizing: border-box;
-}
-
 /** MRU Brand Colors (Latter, 2020)
  *  - https://www.mtroyal.ca/AboutMountRoyal/MarketingCommunications/index.htm
  *  - https://www.scribd.com/document/569514571/MRU-Brand-Guideline-2020-07
@@ -23,13 +19,25 @@
     color: white;
 }
 
+html,
+body {
+    height: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     background-color: var(--color-background);
 
-    margin: 0;
-    padding: 0;
-
-    height: 100%;
+    display: grid;
+    grid-template-rows: 25px 1fr;
 }
 
 header {
@@ -38,18 +46,14 @@ header {
     font-weight: bold;
 
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto;
 
     align-items: center;
-
-    margin-bottom: 50px;
 }
 
 /* Selects the header title */
 header h1 {
     font-size: 1rem;
-
-    padding: 0 75px;
 }
 
 nav ul {
@@ -60,18 +64,11 @@ nav ul {
 
 nav ul li a {
     display: block;
-
-    padding: 25px;
 }
 
 /* Selects the api tester button */
 nav ul li:last-child {
     margin-left: auto;
-}
-
-h1, h2 {
-    margin: 0; /* remove default margin */
-    padding: 0; /* remove default padding */
 }
 
 a {
@@ -82,8 +79,6 @@ a {
 /* Selects all column list containers */
 ul {
     list-style-type: none;
-    margin: 0; /* remove default margin */
-    padding: 0; /* remove default padding */
 }
 
 /* Selects all column lists on hover */
