@@ -5,14 +5,12 @@ class StocksDatabase
     public const string TABLE_HISTORY = "history";
     public const string TABLE_PORTFOLIO = "portfolio";
     public const string TABLE_USERS = "users";
-
-    private const string DATA_SOURCE_NAME = "sqlite:data/stocks.db";
     private PDO|null $pdo;
     private PDOStatement $statement;
 
-    public function __construct()
+    public function __construct(string $name)
     {
-        $this->pdo = new PDO(self::DATA_SOURCE_NAME);
+        $this->pdo = new PDO("sqlite:$name");
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     }
