@@ -1,0 +1,31 @@
+article {
+    height: 100%;
+}
+.api-tester-table .table-data-primary a {
+    text-decoration: underline;
+}
+
+.api-tester-table-data-other {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.api-tester-table-data-other ul {
+    display: grid;
+    gap: 10px;
+}
+
+.api-tester-table-data-other li {
+    margin: 0;
+    padding: 0;
+}
+
+.api-tester-table-data-other li:hover {
+    background-color: white;
+}
+
+.api-tester-table-data-other a {
+    text-decoration: underline;
+
+    padding: 15px;
+}
