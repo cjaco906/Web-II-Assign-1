@@ -7,11 +7,14 @@
 .dashboard div {
     background-color: var(--color-lincoln-blue);
     box-shadow: 0 0 25px 0 var(--color-kerby-blue);
-    outline: 5px solid var(--color-focus-blue);
+    outline: 5px solid var(--color-lincoln-blue);
     color: white;
 
     width: 300px;
     border-radius: 10px;
+}
+
+.dashboard h1 {
     padding: 25px 0;
 }
 
@@ -21,6 +24,8 @@
     padding: 15px 0;
 
     text-align: center;
+
+    border-radius: 10px;
 }
 
 /* Selects dashboard card contents */
