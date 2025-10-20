@@ -1,7 +1,7 @@
 <?php
 function render_header(): void
 { ?>
-    <header>
+    <header class="neat-shadow">
         <h2><a href="index.php">PORTFOLIO PROJECT</a></h2>
         <nav>
             <ul>
