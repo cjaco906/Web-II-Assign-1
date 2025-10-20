@@ -3,6 +3,25 @@ require_once "include/database.php";
 require_once "include/header.php";
 
 const STOCKS_DATABASE = new StocksDatabase("data/stocks.db");
+
+function list_endpoints(string $table, string $field): void
+{
+    $sql = "SELECT DISTINCT";
+    $sql .= "\n\n$field";
+    $sql .= "\nFROM $table";
+    $sql .= "\nORDER BY $field";
+
+    STOCKS_DATABASE->prepare($sql);
+    STOCKS_DATABASE->execute();
+
+    while ($row = STOCKS_DATABASE->fetch())
+    {
+        $data = $row[$field];
+        $path = "api/$table.php?ref=$data";
+
+        echo "<li><a href='$path'>$path</a></li>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,20 +47,9 @@ const STOCKS_DATABASE = new StocksDatabase("data/stocks.db");
                         <div>
                             <h2>COMPANIES</h2>
                             <ul>
-                                <li><a href="api/company.php">/api/companies.php</a></li>
+                                <li><a href="api/companies.php">/api/companies.php</a></li>
                                 <?php
-                                $sql = "SELECT symbol FROM " . StocksDatabase::TABLE_COMPANIES;
-
-                                STOCKS_DATABASE->prepare($sql);
-                                STOCKS_DATABASE->execute();
-
-                                while ($row = STOCKS_DATABASE->fetch())
-                                {
-                                    $symbol = $row["symbol"];
-                                    $path = "api/company.php?ref=$symbol";
-
-                                    echo "<li><a href='$path'>$path</a></li>";
-                                }
+                                list_endpoints(StocksDatabase::TABLE_COMPANIES, "symbol");
                                 ?>
                             </ul>
                         </div>
@@ -49,19 +57,7 @@ const STOCKS_DATABASE = new StocksDatabase("data/stocks.db");
                             <h2>HISTORY</h2>
                             <ul>
                                 <?php
-
-                                $sql = "SELECT DISTINCT symbol FROM " . StocksDatabase::TABLE_HISTORY;
-                                $sql .= " ORDER BY symbol";
-
-                                STOCKS_DATABASE->prepare($sql);
-                                STOCKS_DATABASE->execute();
-
-                                while ($row = STOCKS_DATABASE->fetch()) {
-                                    $symbol = $row["symbol"];
-                                    $path = "api/history.php?ref=$symbol";
-
-                                    echo "<li><a href='$path'>$path</a></li>";
-                                }
+                                list_endpoints(StocksDatabase::TABLE_HISTORY, "symbol");
                                 ?>
                             </ul>
                         </div>
@@ -69,19 +65,7 @@ const STOCKS_DATABASE = new StocksDatabase("data/stocks.db");
                             <h2>PORTFOLIO</h2>
                             <ul>
                                 <?php
-                                $sql = "SELECT DISTINCT userId FROM " . StocksDatabase::TABLE_PORTFOLIO;
-                                $sql .= " ORDER BY userId";
-
-                                STOCKS_DATABASE->prepare($sql);
-                                STOCKS_DATABASE->execute();
-
-                                while ($row = STOCKS_DATABASE->fetch())
-                                {
-                                    $id = $row["userId"];
-                                    $path = "api/portfolio.php?ref=$id";
-
-                                    echo "<li><a href='$path'>$path</a></li>";
-                                }
+                                list_endpoints(StocksDatabase::TABLE_PORTFOLIO, "userId");
                                 ?>
                             </ul>
                         </div>
