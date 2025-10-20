@@ -91,7 +91,7 @@ function compute_stock_value(string $symbol): float
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Company</title>
-    
+
     <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/table.css">
@@ -160,7 +160,7 @@ function compute_stock_value(string $symbol): float
                         </h1>
                     </div>
                 </div>
-                <div class="table customer-porfolio-details">
+                <div class="table customer-portfolio-details">
                     <h1 class="table-title">Portfolio Details</h1>
                     <div class="table-data">
                         <div class="table-data-primary">
@@ -171,7 +171,7 @@ function compute_stock_value(string $symbol): float
                                 {
                                     $symbol = $row["symbol"];
 
-                                    echo "<li><a>$symbol</a></li>";
+                                    echo "<li><a href='company.php?ref=$symbol'>$symbol</a></li>";
                                 }
                                 ?>
                             </ul>

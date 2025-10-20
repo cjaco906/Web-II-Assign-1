@@ -67,12 +67,12 @@ nav ul {
 }
 
 nav ul li a {
-    display: block;
-
     padding: 25px;
 }
 
 a {
+    display: block;
+
     color: inherit; /* use global text color */
     text-decoration: none; /* remove underline */
 }
