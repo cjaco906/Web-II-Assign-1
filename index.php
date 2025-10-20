@@ -4,11 +4,10 @@
 
 require_once "include/header.php";
 require_once "include/database.php";
-require_once "include/ui.php";
 
-const DATABASE = new StocksDatabase();
+const STOCKS_DATABASE = new StocksDatabase("data/stocks.db");
 
-define("SELECTED_CUSTOMER_ID", $_GET["ref"]);
+define("SELECTED_USER_ID", $_GET["ref"]);
 
 $companies = StocksDatabase::TABLE_COMPANIES;
 $history = StocksDatabase::TABLE_HISTORY;
@@ -31,8 +30,8 @@ $query .= "\n\n\nORDER BY $history.date DESC"; // sort by newest
 $query .= "\n\n\nLIMIT 1)"; // returns the newest close result
 $query .= "\n\nGROUP BY $portfolio.symbol)";
 
-query_by_customer($query);
-define("STOCK_VALUES", DATABASE->fetch_all());
+query_by_user($query);
+define("STOCK_VALUES", STOCKS_DATABASE->fetch_all());
 
 $query = "SELECT DISTINCT";
 $query .= "\n\n$companies.symbol,";
@@ -45,8 +44,8 @@ $query .= "\nWHERE $portfolio.userId = :id";
 $query .= "\nGROUP BY $companies.symbol";
 $query .= "\nORDER BY $companies.symbol";
 
-query_by_customer($query);
-define("PORTFOLIO_DETAILS", DATABASE->fetch_all());
+query_by_user($query);
+define("PORTFOLIO_DETAILS", STOCKS_DATABASE->fetch_all());
 
 $query = "SELECT";
 $query .= "\n\nCOUNT(DISTINCT $portfolio.symbol) AS symbol,";
@@ -54,14 +53,24 @@ $query .= "\n\nSUM(portfolio.amount) AS shares";
 $query .= "\nFROM $portfolio";
 $query .= "\nWHERE $portfolio.userId = :id";
 
-query_by_customer($query);
-define("DASHBOARD_DETAILS", DATABASE->fetch_all()[0]);
+query_by_user($query);
+define("DASHBOARD_DETAILS", STOCKS_DATABASE->fetch_all()[0]);
 
-function query_by_customer(string $query): void
+function query_users():void
 {
-    DATABASE->prepare($query);
-    DATABASE->bind(":id", SELECTED_CUSTOMER_ID);
-    DATABASE->execute();
+    $sql = "SELECT";
+    $sql .= "\n\nid, firstname, lastname";
+    $sql .= "\nFROM " . StocksDatabase::TABLE_USERS;
+
+    STOCKS_DATABASE->prepare($sql);
+    STOCKS_DATABASE->execute();   
+}
+
+function query_by_user(string $query): void
+{
+    STOCKS_DATABASE->prepare($query);
+    STOCKS_DATABASE->bind(":id", SELECTED_USER_ID);
+    STOCKS_DATABASE->execute();
 }
 
 function compute_stock_value(string $symbol): float
@@ -75,14 +84,12 @@ function compute_stock_value(string $symbol): float
     $query .= "\nORDER BY $history.date DESC"; // sort by newest
     $query .= "\nLIMIT 1"; // returns the newest close result
 
-    DATABASE->prepare($query);
-    DATABASE->bind(":symbol", $symbol);
-    DATABASE->execute();
+    STOCKS_DATABASE->prepare($query);
+    STOCKS_DATABASE->bind(":symbol", $symbol);
+    STOCKS_DATABASE->execute();
     
-    $test = DATABASE->fetch()["close"];
-    return $test;
+    return STOCKS_DATABASE->fetch_once("close");
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,11 +98,10 @@ function compute_stock_value(string $symbol): float
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Company</title>
 
-    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/table.css">
-    <link rel="stylesheet" href="css/deflist.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
     <?php
@@ -107,10 +113,9 @@ function compute_stock_value(string $symbol): float
                 <h2 class="customer-list-title">Customers</h2>
                 <ul class="customer-list-contents">
                     <?php
-                    DATABASE->select("id, firstname, lastname", StocksDatabase::TABLE_USERS);
-                    DATABASE->execute();
+                    query_users();
                     
-                    while ($customer = DATABASE->fetch()) {
+                    while ($customer = STOCKS_DATABASE->fetch()) {
                         $name = $customer['lastname'] . ", " . $customer['firstname'];
                         $id = $customer["id"];
                         
@@ -121,7 +126,7 @@ function compute_stock_value(string $symbol): float
             </section>
             <section class="customer-portfolio">
                 <?php
-                if (is_null(SELECTED_CUSTOMER_ID)) {
+                if (is_null(SELECTED_USER_ID)) {
                     echo "<h1 class='customer-portfolio-empty neat-shadow'>Please select a customer</h1>";
                     return;
                 }
@@ -154,7 +159,7 @@ function compute_stock_value(string $symbol): float
                                 $total_value += $row["value"];
                             }
                             
-                            echo number_format($total_value, 2);
+                            echo format($total_value);
                             ?>
                         </h1>
                     </div>
@@ -184,7 +189,7 @@ function compute_stock_value(string $symbol): float
                                     {
                                         $name = $row["name"];
 
-                                        echo "<li><a>$name</a></li>";
+                                        echo "<li>$name</li>";
                                     }
                                     ?>
                                 </ul>
@@ -226,7 +231,7 @@ function compute_stock_value(string $symbol): float
 
                                         $close = compute_stock_value($symbol);
                                         $value = $shares * $close;
-                                        $value = number_format($value, 2);
+                                        $value = format($value);
 
                                         echo "<li>$value</li>";
                                     }
@@ -242,4 +247,4 @@ function compute_stock_value(string $symbol): float
 </body>
 </html>
 <?php
-DATABASE->close();
+STOCKS_DATABASE->close();

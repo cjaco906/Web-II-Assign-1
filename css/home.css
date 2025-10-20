@@ -74,6 +74,9 @@ article {
 
 .customer-portfolio-details .table-data-primary li {
     text-decoration: underline;
+
+    margin: 0;
+    padding: 0;
 }
 
 .customer-portfolio-details .table-data-primary a {
