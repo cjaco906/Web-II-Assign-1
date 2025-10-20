@@ -13,47 +13,47 @@ $companies = StocksDatabase::TABLE_COMPANIES;
 $history = StocksDatabase::TABLE_HISTORY;
 $portfolio = StocksDatabase::TABLE_PORTFOLIO;
 
-$query = "SELECT";
-$query .= "\n\nSUM(shares * close) AS value";
-$query .= "\nFROM ("; // brings in share and close results
-$query .= "\n\nSELECT";
-$query .= "\n\n\nSUM($portfolio.amount) AS shares,"; // prevents duplication
-$query .= "\n\n\n$history.close AS close";
-$query .= "\n\nFROM $history";
-$query .= "\n\nINNER JOIN $portfolio ON $portfolio.symbol = $history.symbol"; // brings in close results
-$query .= "\n\nWHERE $portfolio.userId = :id AND $history.close = ("; // match with the newest close results for every company
-$query .= "\n\n\nSELECT";
-$query .= "\n\n\n\n$history.close";
-$query .= "\n\n\nFROM $history";
-$query .= "\n\n\nWHERE $history.symbol = $portfolio.symbol";
-$query .= "\n\n\nORDER BY $history.date DESC"; // sort by newest
-$query .= "\n\n\nLIMIT 1)"; // returns the newest close result
-$query .= "\n\nGROUP BY $portfolio.symbol)";
+$sql = "SELECT";
+$sql .= "\n\nSUM(shares * close) AS value";
+$sql .= "\nFROM ("; // brings in share and close results
+$sql .= "\n\nSELECT";
+$sql .= "\n\n\nSUM($portfolio.amount) AS shares,"; // prevents duplication
+$sql .= "\n\n\n$history.close AS close";
+$sql .= "\n\nFROM $history";
+$sql .= "\n\nINNER JOIN $portfolio ON $portfolio.symbol = $history.symbol"; // brings in close results
+$sql .= "\n\nWHERE $portfolio.userId = :id AND $history.close = ("; // match with the newest close results for every company
+$sql .= "\n\n\nSELECT";
+$sql .= "\n\n\n\n$history.close";
+$sql .= "\n\n\nFROM $history";
+$sql .= "\n\n\nWHERE $history.symbol = $portfolio.symbol";
+$sql .= "\n\n\nORDER BY $history.date DESC"; // sort by newest
+$sql .= "\n\n\nLIMIT 1)"; // returns the newest close result
+$sql .= "\n\nGROUP BY $portfolio.symbol)";
 
-query_by_user($query);
+query_by_user($sql);
 define("STOCK_VALUES", STOCKS_DATABASE->fetch_all());
 
-$query = "SELECT DISTINCT";
-$query .= "\n\n$companies.symbol,";
-$query .= "\n\n$companies.name,";
-$query .= "\n\n$companies.sector,";
-$query .= "\n\nSUM($portfolio.amount) AS shares";
-$query .= "\nFROM $companies";
-$query .= "\nINNER JOIN $portfolio ON $portfolio.symbol = $companies.symbol";
-$query .= "\nWHERE $portfolio.userId = :id";
-$query .= "\nGROUP BY $companies.symbol";
-$query .= "\nORDER BY $companies.symbol";
+$sql = "SELECT DISTINCT";
+$sql .= "\n\n$companies.symbol,";
+$sql .= "\n\n$companies.name,";
+$sql .= "\n\n$companies.sector,";
+$sql .= "\n\nSUM($portfolio.amount) AS shares";
+$sql .= "\nFROM $companies";
+$sql .= "\nINNER JOIN $portfolio ON $portfolio.symbol = $companies.symbol";
+$sql .= "\nWHERE $portfolio.userId = :id";
+$sql .= "\nGROUP BY $companies.symbol";
+$sql .= "\nORDER BY $companies.symbol";
 
-query_by_user($query);
+query_by_user($sql);
 define("PORTFOLIO_DETAILS", STOCKS_DATABASE->fetch_all());
 
-$query = "SELECT";
-$query .= "\n\nCOUNT(DISTINCT $portfolio.symbol) AS symbol,";
-$query .= "\n\nSUM(portfolio.amount) AS shares";
-$query .= "\nFROM $portfolio";
-$query .= "\nWHERE $portfolio.userId = :id";
+$sql = "SELECT";
+$sql .= "\n\nCOUNT(DISTINCT $portfolio.symbol) AS symbol,";
+$sql .= "\n\nSUM(portfolio.amount) AS shares";
+$sql .= "\nFROM $portfolio";
+$sql .= "\nWHERE $portfolio.userId = :id";
 
-query_by_user($query);
+query_by_user($sql);
 define("DASHBOARD_DETAILS", STOCKS_DATABASE->fetch_all()[0]);
 
 function query_users():void
