@@ -8,7 +8,7 @@ require_once "include/ui.php";
 
 const DATABASE = new StocksDatabase();
 
-define("SELECTED_CUSTOMER_ID", $_GET["ref"]);
+define("SELECTED_CUSTOMER_ID", 7);
 
 $companies = StocksDatabase::TABLE_COMPANIES;
 $history = StocksDatabase::TABLE_HISTORY;
@@ -98,12 +98,12 @@ function compute_stock_value(string $symbol): float
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-<?php
-render_header();
-?>
+    <?php
+    render_header();
+    ?>
     <main>
         <article>
-            <section class="customer-list">
+            <section class="customer-list neat-shadow">
                 <h2 class="customer-list-title">Customers</h2>
                 <ul class="customer-list-contents">
                     <?php
@@ -139,7 +139,7 @@ render_header();
                     </div>
                     <div>
                         <h1>TOTAL VALUE</h1>
-                        <h1>
+                        <h1 class="format-accounting">
                             <?php
                             $total_value = 0;
 
@@ -209,7 +209,7 @@ render_header();
                                     ?>
                                 </ul>
                             </div>
-                            <div>
+                            <div class="format-accounting-list">
                                 <h2>VALUE</h2>
                                 <ul>
                                     <?php
