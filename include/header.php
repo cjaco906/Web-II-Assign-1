@@ -7,7 +7,7 @@ function render_header(): void
             <ul>
                 <li><a href="index.php">HOME</a></li>
                 <li><a href="about.php">ABOUT</a></li>
-                <li><a href="about.php">API TESTER</a></li>
+                <li><a href="api-tester.php">API TESTER</a></li>
             </ul>
         </nav>
     </header>
