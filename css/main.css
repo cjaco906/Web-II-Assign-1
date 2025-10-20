@@ -21,6 +21,7 @@
 
 html,
 body {
+    width: 100%;
     height: 100%;
 }
 
@@ -37,7 +38,7 @@ body {
     background-color: var(--color-background);
 
     display: grid;
-    grid-template-rows: 25px 1fr;
+    grid-template-rows: auto 1fr;
 }
 
 header {
@@ -46,29 +47,29 @@ header {
     font-weight: bold;
 
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 1fr;
+    gap: 50px;
 
     align-items: center;
+
+    position: sticky;
+    top: 0;
 }
 
 /* Selects the header title */
-header h1 {
-    font-size: 1rem;
+header h2 {
+    padding-left: 50px;
 }
 
 nav ul {
-    font-size: 1rem;
-
     display: flex;
+    justify-content: end;
 }
 
 nav ul li a {
     display: block;
-}
 
-/* Selects the api tester button */
-nav ul li:last-child {
-    margin-left: auto;
+    padding: 25px;
 }
 
 a {
@@ -79,6 +80,10 @@ a {
 /* Selects all column list containers */
 ul {
     list-style-type: none;
+}
+
+li {
+    white-space: nowrap;
 }
 
 /* Selects all column lists on hover */
