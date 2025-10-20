@@ -8,11 +8,8 @@ require_once "include/header.php";
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Company</title>
 
-    <link rel="stylesheet" href="css/about.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/table.css">
-    <link rel="stylesheet" href="css/deflist.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/about.css">
 </head>
 <body>
     <?php
