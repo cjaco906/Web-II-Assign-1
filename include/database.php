@@ -1,4 +1,7 @@
 <?php
+// number_format - https://www.php.net/manual/en/function.number-format.php
+// is_float - https://www.php.net/manual/en/function.is-float.php
+
 class StocksDatabase
 {
     public const string TABLE_COMPANIES = "companies";
@@ -18,11 +21,6 @@ class StocksDatabase
     public function prepare($query): PDOStatement
     {
         return $this->statement = $this->pdo->prepare($query);
-    }
-
-    public function select($fields, $table, $options = ""): PDOStatement
-    {
-        return $this->statement = $this->pdo->prepare("SELECT $fields FROM $table $options");
     }
 
     public function bind($name, $value): bool
@@ -48,4 +46,21 @@ class StocksDatabase
     {
         $this->pdo = null;
     }
+}
+
+function format($data, $decimals = true): mixed
+{
+    if (is_numeric($data))
+    {
+        if ($decimals && is_float($data))
+        {
+            return number_format($data, 2);
+        }
+        else
+        {
+            return number_format($data);
+        }
+    }
+
+    return $data;
 }
