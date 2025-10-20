@@ -11,6 +11,7 @@
     --color-focus-blue: #00b1ff;
     --color-historic-silver: #a7a9ac;
     --color-background: color-mix(in srgb, var(--color-focus-blue) 25%, white 75%);    --color-kerby-blue: #003352;
+    --box-shadow: 0 0 25px 0 var(--color-kerby-blue);
 
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
