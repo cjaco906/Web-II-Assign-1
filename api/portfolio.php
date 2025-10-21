@@ -15,7 +15,7 @@ if (isset($_GET[QUERY_STRING]))
     $database->bind(":id", $_GET[QUERY_STRING]);
     $database->execute();
 
-    $result = STOCKS_DATABASE->fetch_all();
+    $result = $database->fetch_all();
 
     echo json_encode($result, JSON_NUMERIC_CHECK);
 
