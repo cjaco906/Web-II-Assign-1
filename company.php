@@ -33,8 +33,17 @@ function query(string $table, string $field): void
 function list_history(string $field): void
 {
     query(StocksDatabase::TABLE_HISTORY, $field);
-    
-    while ($company = STOCKS_DATABASE->fetch()) {
+
+    $company = STOCKS_DATABASE->fetch();
+    if (!isset($company))
+    {
+        echo "<li>N/A</li>";
+
+        return;
+    }
+
+    while ($company = STOCKS_DATABASE->fetch())
+    {
         $data = $company[$field];
         $data = format($data);
 
@@ -44,7 +53,6 @@ function list_history(string $field): void
 
 function list_financials(string $field): void
 {
-    
     try
     {
         $company = COMPANY["financials"];
@@ -54,7 +62,14 @@ function list_financials(string $field): void
     {
         die($e->getMessage());
     }
-    
+
+    if (!isset($json))
+    {
+        echo "<li>N/A</li>";
+
+        return;
+    }
+
     $array = $json[$field];
 
     foreach ($array as $data)
