@@ -19,7 +19,7 @@ require_once "include/header.php";
         <article>
             <section class="about neat-shadow">
                 <h1 class="about-title">ABOUT</h1>
-                <div class="about-details nea">
+                <div class="about-details neat-shadow">
                     <p>
                         My name is Ramos&mdash;A student in Mount Royal University.
                         <br>
