@@ -1,6 +1,7 @@
 article {
     height: 100%;
 }
+
 .api-tester-table .table-data-primary a {
     text-decoration: underline;
 }
@@ -16,8 +17,15 @@ article {
 }
 
 .api-tester-table-data-other li {
+    grid-template-columns: 100px 1fr;
+    align-items: center;
+
     margin: 0;
     padding: 0;
+}
+
+.api-tester-table-data-other li::before {
+    content: "API"
 }
 
 .api-tester-table-data-other li:hover {
