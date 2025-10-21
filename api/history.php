@@ -20,4 +20,5 @@ if (isset($_GET[QUERY_STRING]))
 
     echo json_encode($result, JSON_NUMERIC_CHECK);
 
+    STOCKS_DATABASE->close();
 }

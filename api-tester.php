@@ -76,3 +76,5 @@ function list_endpoints(string $table, string $field): void
     </main>
 </body>
 </html>
+<?php
+STOCKS_DATABASE->close();

@@ -25,3 +25,5 @@ STOCKS_DATABASE->execute();
 $result = STOCKS_DATABASE->fetch_all();
 
 echo json_encode($result);
+
+STOCKS_DATABASE->close();

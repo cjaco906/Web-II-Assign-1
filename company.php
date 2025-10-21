@@ -65,7 +65,6 @@ function list_financials(string $field): void
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -340,6 +339,5 @@ function list_financials(string $field): void
     </footer>
 </body>
 </html>
-
 <?php
 STOCKS_DATABASE->close();

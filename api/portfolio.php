@@ -18,4 +18,6 @@ if (isset($_GET[QUERY_STRING]))
     $result = STOCKS_DATABASE->fetch_all();
 
     echo json_encode($result, JSON_NUMERIC_CHECK);
+
+    STOCKS_DATABASE->close();
 }
