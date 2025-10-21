@@ -4,10 +4,18 @@
 
 require_once "include/header.php";
 require_once "include/database.php";
+require_once "include/api.php";
 
 const STOCKS_DATABASE = new StocksDatabase("data/stocks.db");
 
-define("SELECTED_USER_ID", $_GET["ref"]);
+if (isset($_GET[QUERY_STRING]))
+{
+    define("SELECTED_USER_ID", $_GET[QUERY_STRING]);
+}
+else
+{
+    define("SELECTED_USER_ID", null);
+}
 
 $companies = StocksDatabase::TABLE_COMPANIES;
 $history = StocksDatabase::TABLE_HISTORY;

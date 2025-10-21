@@ -1,23 +1,23 @@
 <?php
 require_once "../include/database.php";
+require_once "../include/api.php";
 
 const STOCKS_DATABASE = new StocksDatabase("../data/stocks.db");
 
-define("SELECTED_COMPANY", $_GET["ref"]);
 header("Content-Type: application/json");
 
 $sql = "SELECT * FROM " . StocksDatabase::TABLE_COMPANIES;
 
-if (!is_null(SELECTED_COMPANY))
+if (isset($_GET[QUERY_STRING]))
 {
     $sql .= "\nWHERE symbol = :symbol";
 }
 
 STOCKS_DATABASE->prepare($sql);
 
-if (!is_null(SELECTED_COMPANY))
+if (isset($_GET[QUERY_STRING]))
 {
-    STOCKS_DATABASE->bind(":symbol", SELECTED_COMPANY);
+    STOCKS_DATABASE->bind(":symbol", $_GET[QUERY_STRING]);
 }
 
 STOCKS_DATABASE->execute();

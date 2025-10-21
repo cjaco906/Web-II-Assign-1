@@ -3,12 +3,20 @@
 
 require_once "include/header.php";
 require_once "include/database.php";
+require_once "include/api.php";
 
 const STOCKS_DATABASE = new StocksDatabase("data/stocks.db");
 
-define("COMPANY_SYMBOL", $_GET["ref"]);
-query(StocksDatabase::TABLE_COMPANIES, "*");
-define("COMPANY", STOCKS_DATABASE->fetch_all()[0]);
+if (isset($_GET[QUERY_STRING]))
+{
+    define("COMPANY_SYMBOL", $_GET[QUERY_STRING]);
+    query(StocksDatabase::TABLE_COMPANIES, "*");
+    define("COMPANY", STOCKS_DATABASE->fetch_all()[0]);
+}
+else
+{
+    die("The query string (ref) is undefined");
+}
 
 function query(string $table, string $field): void
 {
